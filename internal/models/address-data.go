@@ -1,7 +1,7 @@
 package models
 
 type AddressData struct {
-	ID                      uint              `json:"id" gorm:"primaryKey;autoIncrement"`
+	ID                   uint   `json:"id" gorm:"primaryKey;autoIncrement"`
 	PersoanaID           int    `json:"persoana_juridica_id"`
 	Country              string `json:"country"`
 	Region               string `json:"region"`
