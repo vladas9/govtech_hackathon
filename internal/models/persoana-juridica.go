@@ -2,9 +2,9 @@ package models
 
 type PersoanaJuridica struct {
 	ID                      uint              `json:"id" gorm:"primaryKey;autoIncrement"`
-	IDNO                    int               `json:"idno"`
-	FiscalCode              int               `json:"fiscal_code"`
-	CuiioCode               int               `json:"cuiio_code"`
+	IDNO                    string            `json:"idno"`
+	FiscalCode              string            `json:"fiscal_code"`
+	CuiioCode               string            `json:"cuiio_code"`
 	Name                    string            `json:"name"`
 	ShortName               string            `json:"short_name"`
 	RegistrationDate        string            `json:"registration_date"`
