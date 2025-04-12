@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 
 	m "govtech/internal/models"
+
 )
 
 var DB *gorm.DB
@@ -39,7 +40,9 @@ func Init_DB() error {
 		&m.AddressData{},
 		&m.DateFinanciare{},
 		&m.FondatorAdmin{},
-		&m.Modificare{})
+		&m.Modificare{},
+		&m.Grant{},
+		&m.Requirement{})
 
 	if err != nil {
 		return fmt.Errorf("Failed to migrate database: %v", err)

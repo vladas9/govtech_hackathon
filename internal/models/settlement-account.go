@@ -1,7 +1,7 @@
 package models
 
 type SettlementAccount struct {
-	ID                 int    `json:"id"`
+	ID                      uint              `json:"id" gorm:"primaryKey;autoIncrement"`
 	PersoanaJuridicaID int    `json:"persoana_juridica_id"`
 	SettlementAccount  string `json:"settlement_account"`
 	BankCode           string `json:"bank_code"`

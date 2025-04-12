@@ -1,7 +1,7 @@
 package models
 
 type DateFinanciare struct {
-	ID                   int     `json:"id"`
+	ID                      uint              `json:"id" gorm:"primaryKey;autoIncrement"`
 	PersoanaJuridicaID   int     `json:"persoana_juridica_id"`
 	CifraAfacerilor      float64 `json:"cifra_afacerilor"`       // venituri 12 luni
 	ProfitNet            float64 `json:"profit_net"`             // profit/pierdere
