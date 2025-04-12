@@ -2,7 +2,7 @@ package models
 
 type AddressData struct {
 	ID                   int    `json:"id"`
-	PersoanaJuridicaID   int    `json:"persoana_juridica_id"`
+	PersoanaID           int    `json:"persoana_juridica_id"`
 	Country              string `json:"country"`
 	Region               string `json:"region"`
 	Locality             string `json:"locality"`
