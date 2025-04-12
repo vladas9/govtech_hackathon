@@ -2,12 +2,14 @@ package database
 
 import (
 	"fmt"
-	m "govtech/internal/models"
 	"os"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	m "govtech/internal/models"
+
 )
 
 var DB *gorm.DB
@@ -35,7 +37,10 @@ func Init_DB() error {
 		&m.PersoanaJuridica{},
 		&m.Activity{},
 		&m.SettlementAccount{},
-		&m.AddressData{})
+		&m.AddressData{},
+		&m.DateFinanciare{},
+		&m.FondatorAdmin{},
+		&m.Modificare{})
 
 	if err != nil {
 		return fmt.Errorf("Failed to migrate database: %v", err)
