@@ -1,11 +1,16 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"govtech/internal/database"
+	"govtech/internal/router"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	gin.ForceConsoleColor()
 
-	postgres.Init_DB()
+	database.Init_DB()
 	r := router.NewRouter()
 
 	r.Run()

@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	m "govtech/internal/models"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -30,7 +31,11 @@ func Init_DB() error {
 		return fmt.Errorf("Failed to init db: %v", err)
 	}
 
-	err = DB.AutoMigrate()
+	err = DB.AutoMigrate(
+		&m.PersoanaJuridica{},
+		&m.Activity{},
+		&m.SettlementAccount{},
+		&m.AddressData{})
 
 	if err != nil {
 		return fmt.Errorf("Failed to migrate database: %v", err)
