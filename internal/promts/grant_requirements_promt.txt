@@ -1,0 +1,11 @@
+
+Grant Promotional Profile
+
+Grant Name: {{.Name}} (ID: {{.ID}})
+
+Requirements:
+{{range .Requirements}}
+  - {{.Name}} (Requirement ID: {{.ID}})
+{{else}}
+  No requirements available.
+{{end}}

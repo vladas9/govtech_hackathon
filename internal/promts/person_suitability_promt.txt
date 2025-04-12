@@ -1,0 +1,19 @@
+Promotional Profile
+
+Company: {{.Name}} ({{.ShortName}})
+Registered on: {{.RegistrationDate}}
+Legal Form: {{.LegalFormCode}} - Status: {{.LegalStatusCode}}
+
+Capital Snapshot:
+  - Authorized Capital: {{.AuthorizedCapital}}
+
+Location:
+  - Country: {{.AddressData.Country}}, Region: {{.AddressData.Region}}
+  - Locality: {{.AddressData.Locality}}, Street: {{.AddressData.Street}}, House: {{.AddressData.House}}
+
+Founders/Administrators:
+{{range .FondatoriAdministratori}}
+  - {{.Nume}} ({{.Functie}})
+{{else}}
+  No founders/administrators available.
+{{end}}
