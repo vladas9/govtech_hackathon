@@ -42,7 +42,8 @@ func Init_DB() error {
 		&m.FondatorAdmin{},
 		&m.Modificare{},
 		&m.Grant{},
-		&m.Requirement{})
+		&m.Requirement{},
+		&m.ContactIdentifier{})
 
 	if err != nil {
 		return fmt.Errorf("Failed to migrate database: %v", err)
