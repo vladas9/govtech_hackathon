@@ -22,6 +22,9 @@ func (pjr *PersoanaJuridicaRepo) Get(id int) (*models.PersoanaJuridica, error) {
 		Preload("AddressDate").
 		Preload("SettlementAccount").
 		Preload("Activity").
+		Preload("DateFinaciare").
+		Preload("FondatoriAdministratori").
+		Preload("IstoricModificari").
 		First(PersoanaJuridica, "id = ?", id)
 
 	if result.Error != nil {
