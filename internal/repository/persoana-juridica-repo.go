@@ -15,7 +15,7 @@ func NewJobRepo() *PersoanaJuridicaRepo {
 	return &PersoanaJuridicaRepo{tx: database.DB}
 }
 
-func (pjr *PersoanaJuridicaRepo) Get(id int) (*models.PersoanaJuridica, error) {
+func (pjr *PersoanaJuridicaRepo) Get(key string, value any) (*models.PersoanaJuridica, error) {
 	PersoanaJuridica := &models.PersoanaJuridica{}
 
 	result := pjr.tx.
@@ -25,7 +25,7 @@ func (pjr *PersoanaJuridicaRepo) Get(id int) (*models.PersoanaJuridica, error) {
 		Preload("DateFinaciare").
 		Preload("FondatoriAdministratori").
 		Preload("IstoricModificari").
-		First(PersoanaJuridica, "id = ?", id)
+		First(PersoanaJuridica, key+" = ?", value)
 
 	if result.Error != nil {
 		return nil, result.Error

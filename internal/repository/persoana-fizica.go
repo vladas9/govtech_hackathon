@@ -15,12 +15,12 @@ func NewPersonaFizicaRepo() *PersoanaFizicaRepo {
 	return &PersoanaFizicaRepo{tx: database.DB}
 }
 
-func (pjr *PersoanaFizicaRepo) Get(id int) (*models.PersoanaFizica, error) {
+func (pjr *PersoanaFizicaRepo) Get(key string, value any) (*models.PersoanaFizica, error) {
 	PersonaFizica := &models.PersoanaFizica{}
 
 	result := pjr.tx.
 		Preload("AddressDate").
-		First(PersonaFizica, "id = ?", id)
+		First(PersonaFizica, key+" = ?", value)
 
 	if result.Error != nil {
 		return nil, result.Error
