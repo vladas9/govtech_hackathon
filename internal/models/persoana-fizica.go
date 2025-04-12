@@ -1,6 +1,7 @@
 package models
 
 type PersoanaFizica struct {
+	ID               uint        `json:"id" gorm:"primaryKey;autoIncrement"`
 	IDNP             string      `json:"idnp" gorm:"type:varchar(13)"`          // Numărul unic de identificare al persoanei (IDNP)
 	Firstname        string      `json:"firstname" gorm:"type:varchar(30)"`     // Prenumele persoanei
 	Lastname         string      `json:"lastname" gorm:"type:varchar(30)"`      // Numele de familie
