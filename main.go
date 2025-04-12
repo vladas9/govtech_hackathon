@@ -1,16 +1,19 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"govtech/internal/database"
 	"govtech/internal/router"
 
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	gin.ForceConsoleColor()
 
 	database.Init_DB()
+
+	// database.SeedDatabase();
 	r := router.NewRouter()
 
 	r.Run()
