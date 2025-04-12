@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 
 	m "govtech/internal/models"
-
 )
 
 var DB *gorm.DB
