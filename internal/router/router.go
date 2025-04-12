@@ -1,6 +1,10 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"govtech/internal/controller"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Controller interface {
 	RegisterRoutes(router *gin.RouterGroup)
@@ -26,7 +30,9 @@ func NewRouter() routes {
 
 	api := r.router.Group("/api")
 
-	controllers := []Controller{}
+	controllers := []Controller{
+		controller.NewWorkerController(),
+	}
 
 	for _, controller := range controllers {
 		controller.RegisterRoutes(api)

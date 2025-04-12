@@ -20,9 +20,9 @@ func NewWorkerController() *PersonController {
 }
 
 func (pc *PersonController) RegisterRoutes(router *gin.RouterGroup) {
-	workerRouter := router.Group("/person")
+	personRouter := router.Group("/person")
 	{
-		workerRouter.POST("/login", pc.handleLogin)
+		personRouter.POST("/login", pc.handleLogin)
 	}
 }
 
@@ -36,8 +36,14 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"message": "login successful",
-		"phone":   loginData.Phone,
-	})
+	response, err := pc.service.Login(loginData.Phone)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "login failed"})
+		return
+	}
+
+	data := make(map[string]any)
+	data[response.Type] = response.Number
+
+	c.JSON(200, data)
 }
