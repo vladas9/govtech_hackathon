@@ -57,9 +57,30 @@ func (ls *LLMService) PreparePersonPromt(data *models.PersoanaJuridica) (string,
 	return renderedOutput, nil
 }
 
-func (ls *LLMService) GetMatchingAnswer() (string, error) {
+func (ls *LLMService) GetMatchingAnswer(idno string) (string, error) {
 	godotenv.Load()
 	promt := "I need you to return a json with the score if the person is suitable and the requirement and the true or false value if it is suitable by this requirement"
+
+	person, err := repository.NewPersoanaJuridicaRepo().Get("id_no", idno)
+	if err != nil {
+		return "", nil
+	}
+
+	personPromt, err := ls.PreparePersonPromt(person)
+	if err != nil {
+		return "", err
+	}
+
+	promt += personPromt
+
+	for i := 1; i < 11; i++ {
+		requirementsPromt, err := ls.PrepareRequirementsPromt(uint(i))
+		if err != nil {
+			return "", err
+		}
+
+		promt += requirementsPromt
+	}
 
 	client := groq.NewClient()
 	groqResponse, err := client.CreateChatCompletion(groq.CompletionCreateParams{

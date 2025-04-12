@@ -11,7 +11,7 @@ type PersoanaJuridicaRepo struct {
 	tx *gorm.DB
 }
 
-func NewJobRepo() *PersoanaJuridicaRepo {
+func NewPersoanaJuridicaRepo() *PersoanaJuridicaRepo {
 	return &PersoanaJuridicaRepo{tx: database.DB}
 }
 
