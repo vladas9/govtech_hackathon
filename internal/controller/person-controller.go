@@ -83,7 +83,7 @@ func (pc *PersonController) handleGrants(c *gin.Context) {
 
 	var grants string
 	var err error
-	if reqData.Type == "IDNP" {
+	if reqData.Type == "IDNO" {
 		grants, err = pc.LLMService.GetMatchingAnswer(reqData.NDNValue)
 		if err != nil {
 			log.Println("❌ Eroare GetMatchingAnswer:", err)
