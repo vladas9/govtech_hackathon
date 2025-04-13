@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 
 	m "govtech/internal/models"
-
 )
 
 var DB *gorm.DB
@@ -35,6 +34,7 @@ func Init_DB() error {
 
 	err = DB.AutoMigrate(
 		&m.PersoanaJuridica{},
+		&m.PersoanaFizica{},
 		&m.Activity{},
 		&m.SettlementAccount{},
 		&m.AddressData{},
