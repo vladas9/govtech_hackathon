@@ -1,6 +1,8 @@
+{{ define "PersoanaFizica" }}
 IDNP:              {{ .IDNP }}
 Firstname:         {{ .Firstname }}
 Lastname:          {{ .Lastname }}
+Sex:               {{.SexCode}}
 Secondname:        {{ .Secondname }}
 Birthdate:         {{ .Birthdate }}
 Deathdate:         {{ .Deathdate }}
@@ -10,13 +12,13 @@ Birth Region:      {{ .BirthRegion }}
 Citizenship Code:  {{ .CitizenCode }}
 
 Address Data:
-  {{- template "AddressData" .AddressData }}
-{{- end }}
+  {{ template "AddressData" .AddressData }}
+{{ end }}
 
-{{- define "AddressData" -}}
+{{ define "AddressData" }}
 Street:            {{ .Street }}
 City:              {{ .City }}
 Region:            {{ .Region }}
-Postal Code:       {{ .PostalCode }}
+Postal Code:       {{ .Post }}
 Country:           {{ .Country }}
-{{- end }}
+{{ end }}

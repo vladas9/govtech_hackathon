@@ -243,7 +243,7 @@ I will provide:
 - and grant requirements.
 He is anly eligibil for 
 	- Start Pentru Tineri
- 	- Programul de Susținere a Antreprenoriatului Feminin
+ 	- Programul de Susținere a Antreprenoriatului Feminin(Should be a femail to be ilegibil, SEX: F)
 So you can put for all other ineligibil from start
 
 Based on this, return a **strict JSON** object with the following format:

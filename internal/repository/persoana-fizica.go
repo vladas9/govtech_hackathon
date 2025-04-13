@@ -19,7 +19,7 @@ func (pjr *PersoanaFizicaRepo) Get(key string, value any) (*models.PersoanaFizic
 	PersonaFizica := &models.PersoanaFizica{}
 
 	result := pjr.tx.
-		Preload("AddressDate").
+		Preload("AddressData").
 		First(PersonaFizica, key+" = ?", value)
 
 	if result.Error != nil {
