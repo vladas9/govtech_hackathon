@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"log"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -48,10 +49,10 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 	}
 
 	// Image
-	// image := response.ImageURL
-	// if strings.TrimSpace(image) == "" {
-	// 	image = "https://randomuser.me/api/portraits/men/32.jpg"
-	// }
+	image := response.ImageURL
+	if strings.TrimSpace(image) == "" {
+		image = "https://randomuser.me/api/portraits/men/32.jpg"
+	}
 
 	data := gin.H{}
 
@@ -59,7 +60,7 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 		data = gin.H{
 			"type":      response.Type,
 			"idn_value": response.Number,
-			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
+			"picture":   image,
 			"name":      user.(*models.PersoanaJuridica).Name,
 			"email":     response.Email,
 			"phone":     response.PhoneNumber,
@@ -69,7 +70,7 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 		data = gin.H{
 			"type":      response.Type,
 			"idn_value": response.Number,
-			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
+			"picture":   image,
 			"name":      user.(*models.PersoanaFizica).Firstname + " " + user.(models.PersoanaFizica).Lastname,
 			"email":     response.Email,
 			"phone":     response.PhoneNumber,
