@@ -1,13 +1,21 @@
-import { Container } from "@/components/layout/container"
-import { Footer } from "@/components/layout/footer"
-import { Header } from "@/components/layout/header"
-import { Navigation } from "@/components/layout/navigation"
-import { Sidebar } from "@/components/sidebar/sidebar"
-import { PageHeader } from "@/components/finantari/page-header"
-import { GrantCard } from "@/components/finantari/grant-card"
-import { grants } from "@/data/grants"
+"use client";
+
+import { Container } from "@/components/layout/container";
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+import { Navigation } from "@/components/layout/navigation";
+import { Sidebar } from "@/components/sidebar/sidebar";
+import { PageHeader } from "@/components/finantari/page-header";
+import { GrantCard } from "@/components/finantari/grant-card";
+import { grants } from "@/data/grants";
+
+import { useGrantsQuery } from "@/hooks/useGrantsQuery";
 
 export default function FinantariPage() {
+  const { data: grantsData } = useGrantsQuery();
+
+  console.log(grantsData);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fafafb]">
       <Header />
@@ -17,8 +25,8 @@ export default function FinantariPage() {
         <Container className="flex">
           <Sidebar />
           <main className="flex-1 px-6">
-            <PageHeader 
-              title="Support Antreprenorial" 
+            <PageHeader
+              title="Support Antreprenorial"
               buttonLabel="Vezi Aplicările Tale"
             />
 
@@ -26,7 +34,9 @@ export default function FinantariPage() {
             <div className="mb-8">
               {/* Grants list */}
               <div className="bg-white rounded-lg border border-[#e0e4ea] p-6 mb-6">
-                <h3 className="text-[20px] text-[#6b7280] font-medium mb-4">Granturi la care poți aplica</h3>
+                <h3 className="text-[20px] text-[#6b7280] font-medium mb-4">
+                  Granturi la care poți aplica
+                </h3>
                 <div className="border-t border-[#e0e4ea]"></div>
 
                 {grants.map((grant) => (
@@ -51,5 +61,5 @@ export default function FinantariPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

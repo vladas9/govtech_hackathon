@@ -68,7 +68,8 @@ const mockFetchUserIdentity = async (phoneNumber: string): Promise<UserIdentity>
   // Mock logic to determine if it's IDNP or IDNO based on phone number
   // For demo purposes: even-ending numbers get IDNP, odd-ending get IDNO
   const lastDigit = parseInt(phoneNumber.slice(-1));
-  
+
+  console.log(lastDigit)
   if (isNaN(lastDigit)) {
     throw new Error("Invalid phone number format");
   }

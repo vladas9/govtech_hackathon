@@ -1,6 +1,7 @@
 'use client'
 
 import { GraturiCard } from "../cards/graturi-card"
+import { PaymentsCard } from "../cards/payments-card"
 import { useUserIdentity } from "@/hooks/useUserIdentity"
 
 interface DashboardProps {
@@ -26,6 +27,7 @@ export function Dashboard({
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <GraturiCard />
+        <PaymentsCard />
         {children}
       </div>
     </main>

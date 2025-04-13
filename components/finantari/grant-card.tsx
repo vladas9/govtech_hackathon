@@ -98,7 +98,7 @@ export function GrantCard({
             alt={imageAlt}
             width={350}
             height={200}
-            className="rounded-lg w-full h-[250px]"
+            className="rounded-lg w-full h-[250px] object-cover"
           />
         </div>
       </div>
