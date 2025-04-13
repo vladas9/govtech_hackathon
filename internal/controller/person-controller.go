@@ -1,28 +1,32 @@
 package controller
 
 import (
-	"govtech/internal/service"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	"govtech/internal/service"
+
 )
 
 type PersonController struct {
 	service *service.PersonService
+	LLMService *service.LLMService
 }
 
-func NewWorkerController() *PersonController {
+func NewPersonController() *PersonController {
 	if err := godotenv.Load(); err != nil {
 		log.Println("Error loading .env file")
 	}
-	return &PersonController{}
+	return &PersonController{service: service.NewPersonService(), LLMService: service.NewLLMService()}
 }
 
 func (pc *PersonController) RegisterRoutes(router *gin.RouterGroup) {
 	personRouter := router.Group("/person")
 	{
 		personRouter.POST("/login", pc.handleLogin)
+		personRouter.GET("/grants/:idno", pc.handleGrants)
 	}
 }
 
@@ -46,4 +50,21 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 	data[response.Type] = response.Number
 
 	c.JSON(200, data)
+}
+
+func (pc *PersonController) handleGrants(c *gin.Context) {
+	idno := c.Param("idno")
+	if idno == "" {
+		c.JSON(400, gin.H{"error": "ID number is required"})
+		return
+	}
+
+	grants, err := pc.LLMService.GetMatchingAnswer(idno)
+	if err != nil {
+		log.Println("❌ Eroare GetMatchingAnswer:", err) 
+		c.JSON(404, gin.H{"error": "failed to get grants"})
+		return
+	}
+
+	c.JSON(200, grants)
 }

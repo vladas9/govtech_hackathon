@@ -3,12 +3,16 @@ package service
 import (
 	"bytes"
 	"fmt"
-	"govtech/internal/models"
-	"govtech/internal/repository"
 	"text/template"
+	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 	"github.com/jpoz/groq"
+
+	"govtech/internal/models"
+	"govtech/internal/repository"
+
 )
 
 type LLMService struct{}
@@ -18,12 +22,19 @@ func NewLLMService() *LLMService {
 }
 
 func (ls *LLMService) PrepareRequirementsPromt(grantID uint) (string, error) {
-	grant, err := repository.NewGenericRepo[models.Grant]().Get("id", grantID)
+	grant, err := repository.NewGenericRepo[models.Grant]().GetWithPreload("id", grantID, "Requirements")
+	
 	if err != nil {
 		return "", err
 	}
 
-	tmpl, err := template.ParseFiles("../promts/grant_requirements_promt.txt")
+	wd, err := os.Getwd()
+	if err != nil {	
+		return "", fmt.Errorf("could not get working directory: %v", err)
+	}
+
+	templatePath := filepath.Join(wd, "internal/promts", "grant_requirements_promt.txt")
+	tmpl, err := template.ParseFiles(templatePath)
 	if err != nil {
 		return "", fmt.Errorf("Error parsing template file: %v", err)
 	}
@@ -41,7 +52,13 @@ func (ls *LLMService) PrepareRequirementsPromt(grantID uint) (string, error) {
 }
 
 func (ls *LLMService) PreparePersonPromt(data *models.PersoanaJuridica) (string, error) {
-	tmpl, err := template.ParseFiles("../promts/person_suitability_promt.txt")
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("could not get working directory: %v", err)
+	}
+
+	templatePath := filepath.Join(wd, "internal/promts", "person_suitability_promt.txt")
+	tmpl, err := template.ParseFiles(templatePath)
 	if err != nil {
 		return "", fmt.Errorf("Error parsing template file: %v", err)
 	}
@@ -63,7 +80,7 @@ func (ls *LLMService) GetMatchingAnswer(idno string) (string, error) {
 
 	person, err := repository.NewPersoanaJuridicaRepo().Get("id_no", idno)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	personPromt, err := ls.PreparePersonPromt(person)
@@ -82,10 +99,13 @@ func (ls *LLMService) GetMatchingAnswer(idno string) (string, error) {
 		promt += requirementsPromt
 	}
 
+	fmt.Println("📤 Final prompt to LLM:\n", promt)
+
+
 	client := groq.NewClient()
 	groqResponse, err := client.CreateChatCompletion(groq.CompletionCreateParams{
 		Model:          "llama-3.3-70b-versatile",
-		ResponseFormat: groq.ResponseFormat{Type: "json"},
+		ResponseFormat: groq.ResponseFormat{Type: "json_object"},
 		Messages: []groq.Message{
 			{
 				Role:    "user",

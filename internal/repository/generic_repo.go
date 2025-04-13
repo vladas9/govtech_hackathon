@@ -2,9 +2,11 @@ package repository
 
 import (
 	"fmt"
-	"govtech/internal/database"
 
 	"gorm.io/gorm"
+
+	"govtech/internal/database"
+
 )
 
 type GenericRepo[T any] struct {
@@ -23,6 +25,22 @@ func (r *GenericRepo[T]) Get(key string, value any) (*T, error) {
 	}
 	return &element, nil
 }
+
+func (r *GenericRepo[T]) GetWithPreload(key string, value any, relations ...string) (*T, error) {
+	var element T
+	query := r.tx
+
+	for _, relation := range relations {
+		query = query.Preload(relation)
+	}
+
+	if err := query.Where(fmt.Sprintf("%s = ?", key), value).First(&element).Error; err != nil {
+		return nil, err
+	}
+
+	return &element, nil
+}
+
 
 func (r *GenericRepo[T]) Create(data *T) error {
 	if err := r.tx.Create(data).Error; err != nil {

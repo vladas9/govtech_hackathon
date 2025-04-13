@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"gorm.io/gorm"
+
 	"govtech/internal/database"
 	"govtech/internal/models"
 
-	"gorm.io/gorm"
 )
 
 type PersoanaJuridicaRepo struct {
@@ -19,10 +20,10 @@ func (pjr *PersoanaJuridicaRepo) Get(key string, value any) (*models.PersoanaJur
 	PersoanaJuridica := &models.PersoanaJuridica{}
 
 	result := pjr.tx.
-		Preload("AddressDate").
+		Preload("AddressData").
 		Preload("SettlementAccount").
 		Preload("Activity").
-		Preload("DateFinaciare").
+		Preload("DateFinanciare").
 		Preload("FondatoriAdministratori").
 		Preload("IstoricModificari").
 		First(PersoanaJuridica, key+" = ?", value)
