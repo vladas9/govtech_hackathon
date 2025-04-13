@@ -15,6 +15,7 @@ import (
 
 	"govtech/internal/models"
 	"govtech/internal/repository"
+	"govtech/internal/utils"
 
 )
 
@@ -139,7 +140,14 @@ func (ls *LLMService) GetMatchingAnswer(idno string) (string, error) {
 	}
 
 	prompt := `
-You are an eligibility analyzer. Based on the company profile, grant requirements and CAEM codes, I will give you, return a JSON object in the following format:
+You are an eligibility analyzer.
+
+I will provide:
+- a company profile,
+- its financial indicators,
+- and grant requirements.
+
+Based on this, return a **strict JSON** object with the following format:
 
 {
   "grant_elegibility": [
@@ -161,10 +169,12 @@ You are an eligibility analyzer. Based on the company profile, grant requirement
   ]
 }
 
-A grant is considered "is_eligible": true **only if all its requirements are marked as "is_suitable": true**.
-
-Always respond **only** in this format and do not include any extra explanation.
+IMPORTANT RULES:
+- You MUST include **all available grants** in the output (even if score = 0).
+- A grant is "is_eligible": "true" ONLY if **all** its requirements have "is_suitable": "true".
+- Always respond ONLY with valid JSON in the above format — no extra commentary.
 `
+
 
 	person, err := repository.NewPersoanaJuridicaRepo().Get("id_no", idno)
 	if err != nil {
@@ -177,11 +187,17 @@ Always respond **only** in this format and do not include any extra explanation.
 	}
 	prompt += personPrompt
 
+	indicators := utils.CalculateIndicators(person.DateFinanciare)
+	indicatorsPrompt := utils.FormatIndicators(indicators)
+	prompt += indicatorsPrompt
+
 	for i := 1; i < 11; i++ {
 		reqPrompt, err := ls.PrepareRequirementsprompt(uint(i))
 		if err != nil {
 			return "", err
 		}
+
+		fmt.Println("✅ Prompt for grant", i, ":\n", reqPrompt)
 
 		prompt += reqPrompt
 	}
