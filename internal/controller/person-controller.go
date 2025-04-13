@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -99,5 +100,12 @@ func (pc *PersonController) handleGrants(c *gin.Context) {
 		}
 	}
 
-	c.JSON(200, grants)
+	var grantsJSON map[string]interface{}
+	if err := json.Unmarshal([]byte(grants), &grantsJSON); err != nil {
+		log.Println("❌ Failed to parse JSON string:", err)
+		c.JSON(500, gin.H{"error": "invalid grant format"})
+		return
+	}
+
+	c.JSON(200, grantsJSON)
 }
