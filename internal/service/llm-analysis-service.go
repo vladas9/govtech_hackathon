@@ -36,6 +36,14 @@ func NewLLMService() *LLMService {
 		panic(err)
 	}
 
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS llm_cache_fizica (
+		idnp TEXT PRIMARY KEY,
+		response TEXT
+	)`)
+	if err != nil {
+		panic(err)
+	}	
+
 	return &LLMService{cache: db}
 }
 
@@ -52,6 +60,22 @@ func (ls *LLMService) saveToCache(idno, response string) {
 	_, err := ls.cache.Exec("INSERT OR REPLACE INTO llm_cache (idno, response) VALUES (?, ?)", idno, response)
 	if err != nil {
 		fmt.Println("Eroare salvare cache:", err)
+	}
+}
+
+func (ls *LLMService) getFromCacheFizica(idnp string) (string, bool) {
+	var result string
+	err := ls.cache.QueryRow("SELECT response FROM llm_cache_fizica WHERE idnp = ?", idnp).Scan(&result)
+	if err == nil {
+		return result, true
+	}
+	return "", false
+}
+
+func (ls *LLMService) saveToCacheFizica(idnp, response string) {
+	_, err := ls.cache.Exec("INSERT OR REPLACE INTO llm_cache_fizica (idnp, response) VALUES (?, ?)", idnp, response)
+	if err != nil {
+		fmt.Println("Eroare salvare cache fizica:", err)
 	}
 }
 
@@ -194,7 +218,7 @@ IMPORTANT RULES:
 			return "", err
 		}
 
-		fmt.Println("✅ Prompt for grant", i, ":\n", reqPrompt)
+		fmt.Println("Prompt for grant", i, ":\n", reqPrompt)
 
 		prompt += reqPrompt
 	}
@@ -230,7 +254,7 @@ IMPORTANT RULES:
 func (ls *LLMService) GetMatchingFizica(idnp string) (string, error) {
 	godotenv.Load()
 
-	if cached, found := ls.getFromCache(idnp); found {
+	if cached, found := ls.getFromCacheFizica(idnp); found {
 		fmt.Println("Cache hit for ID:", idnp)
 		return cached, nil
 	}
@@ -311,6 +335,7 @@ IMPORTANT RULES:
 	}
 
 	result := groqResponse.Choices[0].Message.Content
+	ls.saveToCacheFizica(idnp, result)
 
 	return result, nil
 
