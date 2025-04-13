@@ -5,4 +5,5 @@ type ContactIdentifier struct {
 	PhoneNumber string `json:"phone_number"` // Ex: +37369123456
 	Type        string `json:"type"`         // "IDNP" sau "IDNO"
 	Number      string `json:"number"`       // Ex: 1234567890123
+	Email       string `json:"email"`        // Ex: example@email.com
 }
