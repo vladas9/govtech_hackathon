@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
+	"govtech/internal/models"
 	"govtech/internal/service"
-
 )
 
 type PersonController struct {
-	service *service.PersonService
+	service    *service.PersonService
 	LLMService *service.LLMService
 }
 
@@ -40,15 +40,33 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 		return
 	}
 
-	response, err := pc.service.Login(loginData.Phone)
+	user, response, err := pc.service.Login(loginData.Phone)
 	if err != nil {
 		c.JSON(404, gin.H{"error": "login failed"})
 		return
 	}
+	data := gin.H{}
 
-	data := make(map[string]any)
-	data[response.Type] = response.Number
+	if response.Type == "IDNO" {
+		data = gin.H{
+			"type":      response.Type,
+			"idn_value": response.Number,
+			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
+			"name":      user.(*models.PersoanaJuridica).Name,
+			"email":     "john.doe@example.com",
+			"phone":     response.PhoneNumber,
+		}
 
+	} else {
+		data = gin.H{
+			"type":      response.Type,
+			"idn_value": response.Number,
+			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
+			"name":      user.(*models.PersoanaFizica).Firstname + " " + user.(models.PersoanaFizica).Lastname,
+			"email":     "john.doe@example.com",
+			"phone":     response.PhoneNumber,
+		}
+	}
 	c.JSON(200, data)
 }
 
@@ -61,7 +79,7 @@ func (pc *PersonController) handleGrants(c *gin.Context) {
 
 	grants, err := pc.LLMService.GetMatchingAnswer(idno)
 	if err != nil {
-		log.Println("❌ Eroare GetMatchingAnswer:", err) 
+		log.Println("❌ Eroare GetMatchingAnswer:", err)
 		c.JSON(404, gin.H{"error": "failed to get grants"})
 		return
 	}

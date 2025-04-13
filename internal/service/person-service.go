@@ -12,11 +12,18 @@ func NewPersonService() *PersonService {
 	return &PersonService{}
 }
 
-func (ps *PersonService) Login(phone string) (*models.ContactIdentifier, error) {
+func (ps *PersonService) Login(phone string) (any, *models.ContactIdentifier, error) {
 	repo := repository.NewGenericRepo[models.ContactIdentifier]()
 	response, err := repo.Get("phone_number", phone)
-	if err != nil {
-		return nil, err
+	var user any
+	if response.Type == "IDNO" {
+		user, err = repository.NewPersoanaJuridicaRepo().Get("id_no", response.Number)
+	} else {
+		user, err = repository.NewPersonaFizicaRepo().Get("id_np", response.Number)
 	}
-	return response, nil
+
+	if err != nil {
+		return nil, nil, err
+	}
+	return user, response, nil
 }
