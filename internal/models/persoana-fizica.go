@@ -13,5 +13,5 @@ type PersoanaFizica struct {
 	BirthLocality    string      `json:"birthlocality" gorm:"type:varchar(60)"` // Localitatea nașterii
 	BirthRegion      string      `json:"birthregion" gorm:"type:varchar(60)"`   // Raionul nașterii
 	CitizenCode      string      `json:"citizencode"`                           // Statutul juridic al cetățeniei
-	AddressData      AddressData `gorm:"foreignKey:PersoanaID;constraint:OnDelete:CASCADE,OnUpdate:CASCADE" json:"address_data"`
+	AddressData AddressData 	 `gorm:"foreignKey:PersoanaFizicaID" json:"address_data"` // pentru fizică
 }

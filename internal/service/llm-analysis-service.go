@@ -218,8 +218,6 @@ IMPORTANT RULES:
 			return "", err
 		}
 
-		fmt.Println("Prompt for grant", i, ":\n", reqPrompt)
-
 		prompt += reqPrompt
 	}
 

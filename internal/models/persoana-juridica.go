@@ -27,7 +27,7 @@ type PersoanaJuridica struct {
 	LiquidationCauseCode    string            `json:"liquidation_cause_code"`
 	OrganizationType        int               `json:"organization_type"`
 	MotiveCode              int               `json:"motive_code"`
-	AddressData             AddressData       `gorm:"foreignKey:PersoanaID;constraint:OnDelete:CASCADE,OnUpdate:CASCADE" json:"address_data"`
+	AddressData 			AddressData 	  `gorm:"foreignKey:PersoanaJuridicaID" json:"address_data"` // pentru juridică
 	SettlementAccount       SettlementAccount `gorm:"foreignKey:PersoanaJuridicaID;constraint:OnDelete:CASCADE,OnUpdate:CASCADE" json:"settlement_account"`
 	Activity                Activity          `gorm:"foreignKey:PersoanaJuridicaID;constraint:OnDelete:CASCADE,OnUpdate:CASCADE" json:"activity"`
 	DateFinanciare          DateFinanciare    `gorm:"foreignKey:PersoanaJuridicaID;constraint:OnDelete:CASCADE,OnUpdate:CASCADE" json:"date_financiare"`

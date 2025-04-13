@@ -50,7 +50,7 @@ func SeedDatabase() error {
 		}
 
 		addr := models.AddressData{
-			PersoanaID:           int(pj.ID),
+			PersoanaJuridicaID:   pj.ID,
 			Country:              "Moldova",
 			Region:               gofakeit.State(),
 			Locality:             gofakeit.City(),

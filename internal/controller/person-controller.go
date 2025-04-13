@@ -46,6 +46,13 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "login failed"})
 		return
 	}
+
+	// Image
+	// image := response.ImageURL
+	// if strings.TrimSpace(image) == "" {
+	// 	image = "https://randomuser.me/api/portraits/men/32.jpg"
+	// }
+
 	data := gin.H{}
 
 	if response.Type == "IDNO" {
