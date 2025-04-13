@@ -1,10 +1,10 @@
 package router
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"govtech/internal/controller"
-
 )
 
 type Controller interface {
@@ -20,14 +20,14 @@ func NewRouter() routes {
 		router: gin.Default(),
 	}
 
-	// config := cors.Config{
-	// 	AllowOrigins:     []string{"*"},
-	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
-	// 	AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "X-Requested-With"},
-	// 	AllowCredentials: true,
-	// }
+	config := cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "X-Requested-With"},
+		AllowCredentials: true,
+	}
 
-	// r.router.Use(cors.New(config))
+	r.router.Use(cors.New(config))
 
 	api := r.router.Group("/api")
 

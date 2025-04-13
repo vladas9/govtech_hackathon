@@ -16,7 +16,6 @@ import (
 	"govtech/internal/models"
 	"govtech/internal/repository"
 	"govtech/internal/utils"
-
 )
 
 type LLMService struct {
@@ -56,16 +55,15 @@ func (ls *LLMService) saveToCache(idno, response string) {
 	}
 }
 
-
 func (ls *LLMService) PrepareRequirementsprompt(grantID uint) (string, error) {
 	grant, err := repository.NewGenericRepo[models.Grant]().GetWithPreload("id", grantID, "Requirements")
-	
+
 	if err != nil {
 		return "", err
 	}
 
 	wd, err := os.Getwd()
-	if err != nil {	
+	if err != nil {
 		return "", fmt.Errorf("could not get working directory: %v", err)
 	}
 
@@ -175,7 +173,6 @@ IMPORTANT RULES:
 - Always respond ONLY with valid JSON in the above format — no extra commentary.
 `
 
-
 	person, err := repository.NewPersoanaJuridicaRepo().Get("id_no", idno)
 	if err != nil {
 		return "", err
@@ -228,6 +225,119 @@ IMPORTANT RULES:
 	ls.saveToCache(idno, result)
 
 	return result, nil
+}
+
+func (ls *LLMService) GetMatchingFizica(idnp string) (string, error) {
+	godotenv.Load()
+
+	if cached, found := ls.getFromCache(idnp); found {
+		fmt.Println("Cache hit for ID:", idnp)
+		return cached, nil
+	}
+
+	prompt := `
+You are an eligibility analyzer.
+
+I will provide:
+- a phizical person profile,
+- and grant requirements.
+He is anly eligibil for 
+	- Start Pentru Tineri
+ 	- Programul de Susținere a Antreprenoriatului Feminin
+So you can put for all other ineligibil from start
+
+Based on this, return a **strict JSON** object with the following format:
+
+{
+  "grant_elegibility": [
+    {
+      "grant_name": "Program Name",
+      "grant_id": 1,
+      "score": 70,
+      "is_eligible": true,
+      "requirements": [
+        {
+          "requirement_id": 1,
+          "requirement": "Example Requirement",
+          "is_suitable": true
+        },
+        ...
+      ]
+    },
+    ...
+  ]
+}
+
+IMPORTANT RULES:
+- You MUST include **all available grants** in the output (even if score = 0).
+- A grant is "is_eligible": "true" ONLY if **all** its requirements have "is_suitable": "true".
+- Always respond ONLY with valid JSON in the above format — no extra commentary.
+`
+
+	person, err := repository.NewPersonaFizicaRepo().Get("id_np", idnp)
+	if err != nil {
+		return "", err
+	}
+
+	personPrompt, err := ls.preparePersoanaFizicaPromt(person)
+	if err != nil {
+		return "", err
+	}
+	prompt += personPrompt
+
+	for i := 1; i < 11; i++ {
+		reqPrompt, err := ls.PrepareRequirementsprompt(uint(i))
+		if err != nil {
+			return "", err
+		}
+
+		prompt += reqPrompt
+	}
+
+	client := groq.NewClient()
+	groqResponse, err := client.CreateChatCompletion(groq.CompletionCreateParams{
+		Model:          "llama-3.3-70b-versatile",
+		ResponseFormat: groq.ResponseFormat{Type: "json_object"},
+		Messages: []groq.Message{
+			{
+				Role:    "user",
+				Content: prompt,
+			},
+		},
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	result := groqResponse.Choices[0].Message.Content
+
+	return result, nil
+
+}
+
+func (ls *LLMService) preparePersoanaFizicaPromt(data *models.PersoanaFizica) (string, error) {
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("could not get working directory: %v", err)
+	}
+
+	templatePath := filepath.Join(wd, "internal/prompts", "person_fizic_suitability_prompt.txt")
+	tmpl, err := template.ParseFiles(templatePath)
+	if err != nil {
+		return "", fmt.Errorf("Error parsing template file: %v", err)
+	}
+
+	var buf bytes.Buffer
+	err = tmpl.Execute(&buf, data)
+	if err != nil {
+		return "", fmt.Errorf("Error executing template: %v", err)
+	}
+
+	renderedOutput := buf.String()
+
+	return renderedOutput, nil
+
 }
 
 // func isGrantEligible(requirements []Requirement) bool {

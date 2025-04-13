@@ -26,7 +26,7 @@ func (pc *PersonController) RegisterRoutes(router *gin.RouterGroup) {
 	personRouter := router.Group("/person")
 	{
 		personRouter.POST("/login", pc.handleLogin)
-		personRouter.GET("/grants/:idno", pc.handleGrants)
+		personRouter.POST("/grants", pc.handleGrants)
 	}
 }
 
@@ -71,17 +71,32 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 }
 
 func (pc *PersonController) handleGrants(c *gin.Context) {
-	idno := c.Param("idno")
-	if idno == "" {
-		c.JSON(400, gin.H{"error": "ID number is required"})
+	var reqData struct {
+		Type     string `json:"type"`
+		NDNValue string `json:"idn_value"`
+	}
+
+	if err := c.ShouldBindJSON(&reqData); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	grants, err := pc.LLMService.GetMatchingAnswer(idno)
-	if err != nil {
-		log.Println("❌ Eroare GetMatchingAnswer:", err)
-		c.JSON(404, gin.H{"error": "failed to get grants"})
-		return
+	var grants string
+	var err error
+	if reqData.Type == "IDNP" {
+		grants, err = pc.LLMService.GetMatchingAnswer(reqData.NDNValue)
+		if err != nil {
+			log.Println("❌ Eroare GetMatchingAnswer:", err)
+			c.JSON(404, gin.H{"error": "failed to get grants"})
+			return
+		}
+	} else {
+		grants, err = pc.LLMService.GetMatchingFizica(reqData.NDNValue)
+		if err != nil {
+			log.Println("❌ Eroare GetMatchingAnswer:", err)
+			c.JSON(404, gin.H{"error": "failed to get grants"})
+			return
+		}
 	}
 
 	c.JSON(200, grants)

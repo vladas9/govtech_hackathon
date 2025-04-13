@@ -4,6 +4,7 @@ go 1.23.5
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
+	github.com/gin-contrib/cors v1.7.5
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
 	github.com/jpoz/groq v0.0.0-20240513145022-7a02894105a0

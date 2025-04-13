@@ -1,0 +1,22 @@
+IDNP:              {{ .IDNP }}
+Firstname:         {{ .Firstname }}
+Lastname:          {{ .Lastname }}
+Secondname:        {{ .Secondname }}
+Birthdate:         {{ .Birthdate }}
+Deathdate:         {{ .Deathdate }}
+Birth Country:     {{ .BirthCountryCode }}
+Birth Locality:    {{ .BirthLocality }}
+Birth Region:      {{ .BirthRegion }}
+Citizenship Code:  {{ .CitizenCode }}
+
+Address Data:
+  {{- template "AddressData" .AddressData }}
+{{- end }}
+
+{{- define "AddressData" -}}
+Street:            {{ .Street }}
+City:              {{ .City }}
+Region:            {{ .Region }}
+Postal Code:       {{ .PostalCode }}
+Country:           {{ .Country }}
+{{- end }}
