@@ -1,2 +1,5 @@
 .env
 manual_cache_insert.go
+
+./frontend/node_modules
+./frontend/.next
