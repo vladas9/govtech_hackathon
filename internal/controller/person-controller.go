@@ -53,7 +53,7 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 			"idn_value": response.Number,
 			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
 			"name":      user.(*models.PersoanaJuridica).Name,
-			"email":     "john.doe@example.com",
+			"email":     response.Email,
 			"phone":     response.PhoneNumber,
 		}
 
@@ -63,7 +63,7 @@ func (pc *PersonController) handleLogin(c *gin.Context) {
 			"idn_value": response.Number,
 			"picture":   "https://randomuser.me/api/portraits/men/32.jpg",
 			"name":      user.(*models.PersoanaFizica).Firstname + " " + user.(models.PersoanaFizica).Lastname,
-			"email":     "john.doe@example.com",
+			"email":     response.Email,
 			"phone":     response.PhoneNumber,
 		}
 	}
