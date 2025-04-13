@@ -1,2 +1,4 @@
 .env
-manual_cache_insert.go
+cache_backup.go
+cache_kubernetes.go
+govtech-frontend/node_modules
