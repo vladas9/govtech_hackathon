@@ -1,7 +1,11 @@
+'use client'
+
 import { Bell, ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
+import { useUserIdentity, clearUserIdentity } from "@/hooks/useUserIdentity"
+import { useRouter } from "next/navigation"
 
 interface HeaderButtonProps {
   icon?: React.ReactNode
@@ -25,12 +29,24 @@ function HeaderButton({ icon, text, hasDropdown = false, onClick }: HeaderButton
 }
 
 export function Header() {
+  const { data: userData, } = useUserIdentity()
+  const router = useRouter()
+
+  if (!userData) {
+    return null
+  }
+
+  const handleLogout = () => {
+    clearUserIdentity()
+    router.push("/")
+  }
+
   return (
     <header className="bg-[#1373e6] text-white py-2">
       <Container className="flex justify-between items-center">
         <div className="flex items-center">
           <Image
-            src="/placeholder.svg?height=24&width=24"
+            src="/images/gov.png"
             alt="Moldova Coat of Arms"
             width={24}
             height={24}
@@ -48,9 +64,11 @@ export function Header() {
             text="Reminder" 
             hasDropdown={true} 
           />
+
           <HeaderButton 
-            text="Vasile Schidu" 
+            text={userData.name} 
             hasDropdown={true} 
+            onClick={handleLogout}
           />
         </div>
       </Container>

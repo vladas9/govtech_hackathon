@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Info } from "lucide-react"
 import Image from "next/image"
 import { ReactNode } from "react"
+import { Input } from "../ui/input"
 
 interface AuthCardProps {
   title: string
@@ -10,10 +11,9 @@ interface AuthCardProps {
 
 export function AuthCard({ title, children }: AuthCardProps) {
   return (
-    <div className="bg-[#3a8599] text-white rounded-md p-4 flex flex-col items-center">
-      <div className="flex justify-between w-full mb-2">
-        <h2 className="text-xl font-medium">{title}</h2>
-        <Info size={20} />
+    <div className="bg-[#3a8599] text-white rounded-[4px] p-4 flex flex-col items-center h-[350px]">
+      <div className="flex justify-center w-full mb-2">
+        <h2 className="text-xl font-normal">{title}</h2>
       </div>
       {children}
     </div>
@@ -33,23 +33,23 @@ export function MobileSignatureForm({ phoneNumber, setPhoneNumber, onSubmit }: M
         <Image
           src="/images/glyph-mobile-signature.png"
           alt="Mobile Signature"
-          width={80}
-          height={80}
-          className="h-20 w-auto"
+          width={100}
+          height={100}
+          className="h-[100px] w-auto"
         />
       </div>
       <form onSubmit={onSubmit} className="w-full">
         <div className="flex mb-4">
-          <div className="bg-gray-100 border border-gray-300 rounded-l-md px-3 py-2 text-gray-700">+373</div>
-          <input
+          <div className="bg-gray-100 border-gray-300 rounded-l-[6px] px-3 py-2 text-gray-700">+373</div>
+          <Input
             type="text"
             placeholder="XXX00000"
-            className="rounded-l-none border-l-0 flex-1 p-2 border border-gray-300"
+            className="rounded-[6px] text-black rounded-l-none border-l-0 flex-1 p-2 border border-gray-300"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>
-        <Button type="submit" className="w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300">
+        <Button type="submit" className="rounded-[6px] text-[16px] w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300">
           Transmite
         </Button>
       </form>
@@ -60,8 +60,8 @@ export function MobileSignatureForm({ phoneNumber, setPhoneNumber, onSubmit }: M
 export function EVOSignCard() {
   return (
     <AuthCard title="EVOSign (pilotare)">
-      <div className="bg-white p-4 rounded-md mb-4">
-        <Image src="/placeholder.svg?height=180&width=180" alt="QR Code" width={180} height={180} />
+      <div className="bg-white mb-4 rounded-[6px] overflow-hidden">
+        <Image src="/images/qr.png" alt="QR Code" width={180} height={180} />
       </div>
       <p className="text-center">Nu pot scana codul QR</p>
     </AuthCard>
@@ -72,9 +72,9 @@ export function ElectronicSignatureCard() {
   return (
     <AuthCard title="Semnătura electronică">
       <div className="flex justify-center mb-4 py-4">
-        <Image src="/placeholder.svg?height=120&width=120" alt="Coat of Arms" width={120} height={120} />
+        <Image src="/images/glyph-stisc.png" alt="Coat of Arms" width={100} height={150} />
       </div>
-      <Button className="w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300">
+      <Button className="rounded-[6px] text-[16px] h-[60px] whitespace-normal w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300">
         Serviciul Tehnologia Informației și Securitate Cibernetică
       </Button>
     </AuthCard>
@@ -85,11 +85,12 @@ export function TwoStepAuthCard() {
   return (
     <AuthCard title="Autentificarea în 2 pași">
       <div className="flex justify-center mb-4">
-        <Image src="/placeholder.svg?height=80&width=120" alt="Two-step Auth" width={120} height={80} />
+        <Image src="/images/TotpStep1.png" alt="" width={150} height={80} />
+
       </div>
       <form className="w-full space-y-4">
         <div className="flex">
-          <div className="bg-gray-100 border border-gray-300 rounded-l-md px-3 py-2 text-gray-700">
+          <div className="bg-gray-100 border border-gray-300 rounded-l-[6px] px-3 py-2 text-gray-700 flex items-center justify-center">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
@@ -107,15 +108,15 @@ export function TwoStepAuthCard() {
               />
             </svg>
           </div>
-          <input 
+          <Input 
             type="text" 
             placeholder="IDNP" 
-            className="rounded-l-none border-l-0 flex-1 p-2 border border-gray-300" 
-            disabled 
+            className="rounded-[6px] text-black rounded-l-none border-l-0 flex-1 p-2 border border-gray-300" 
+             
           />
         </div>
         <div className="flex">
-          <div className="bg-gray-100 border border-gray-300 rounded-l-md px-3 py-2 text-gray-700">
+          <div className="bg-gray-100 border border-gray-300 rounded-l-[6px] px-3 py-2 text-gray-700 flex items-center justify-center">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
@@ -133,15 +134,15 @@ export function TwoStepAuthCard() {
               />
             </svg>
           </div>
-          <input 
+          <Input 
             type="password" 
-            placeholder="Password" 
-            className="rounded-l-none border-l-0 flex-1 p-2 border border-gray-300" 
-            disabled 
+            placeholder="Parola" 
+            className="rounded-[6px] text-black rounded-l-none border-l-0 flex-1 p-2 border border-gray-300" 
+             
           />
         </div>
-        <Button className="w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300" disabled>
-          Submit
+        <Button className="rounded-[6px] text-[16px] w-full bg-white text-[#333] hover:bg-gray-100 border border-gray-300" >
+          Intra
         </Button>
       </form>
     </AuthCard>

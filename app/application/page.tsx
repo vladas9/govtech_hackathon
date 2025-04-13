@@ -118,7 +118,6 @@ export default function ApplicationPage() {
           <main className="flex-1 px-6">
             <PageHeader 
               title="Aplicare Grant - Start Pentru Tineri" 
-              backLink="/finantari" 
               iconText="$"
             />
 

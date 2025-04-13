@@ -1,3 +1,5 @@
+'use client'
+
 import { ProfileInfo } from "./profile-info"
 import { QuickActions } from "./quick-actions"
 import { ServiceMenu } from "./service-menu"
@@ -21,7 +23,7 @@ export function Sidebar({
   return (
     <aside 
       className={cn(
-        "w-[300px] bg-white border border-[#e0e4ea] rounded-lg p-0 overflow-y-auto",
+        "w-[335px] bg-white border border-[#e0e4ea] rounded-lg p-0 overflow-y-auto",
         className
       )}
     >
