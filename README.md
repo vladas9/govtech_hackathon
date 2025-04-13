@@ -2,7 +2,7 @@
 
 **Empowering Entrepreneurs • Saving Time • Enhancing Public Services**
 
-This project is a backend platform designed to assist **Moldovan entrepreneurs** and the **Organizația pentru Dezvoltarea Antreprenoriatului (ODA)** by **automating the validation of eligibility criteria** for support grants using a combination of structured data analysis and LLM-powered logic.
+This project is a platform designed to assist **Moldovan entrepreneurs** and the **Organizația pentru Dezvoltarea Antreprenoriatului (ODA)** by **automating the validation of eligibility criteria** for support grants using a combination of structured data analysis and LLM-powered logic.
 
 ---
 
